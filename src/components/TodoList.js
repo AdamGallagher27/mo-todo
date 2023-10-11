@@ -1,25 +1,36 @@
 import { useState } from 'react'
 import Todo from './Todo'
-import { Button, Card, Form, ListGroup } from 'react-bootstrap'
+import { Button, Card, ListGroup } from 'react-bootstrap'
 
 const TodoList = () => {
 
 
 	let initialList = [
 		{
-			id: 0,
+			id:0,
 			text: 'this is the todo text',
-			done:true
 		},
 		{
-			id: 1,
+			id:1,
 			text: 'this is the other todo text',
-			done:false
 		},
 	]
 
 	const [list, setList] = useState(initialList)
 	const [textInput, setTextInput] = useState('')
+
+	const addTodoItem = () => {
+		let newTodo = {
+			id: list[list.length - 1],
+			text: textInput,
+		}
+
+		setList([...list, newTodo ])
+	}
+
+	const removeTodo = (id) => {
+		console.log('delete id ' + id)
+	}
 
 	const handleTextInput = (e) => {
 		setTextInput(e.target.value)
@@ -27,11 +38,11 @@ const TodoList = () => {
 
 	const handleSumbit = (e) => {
 		e.preventDefault()
-		setList([...list, <Todo key={list.length} todo={textInput} /> ])
+		addTodoItem()
 	}
 
 	const todoArray = list.map((element) => {
-		return <Todo key={element.id} todo={element} />
+		return <Todo key={element.id} todo={element} remove={removeTodo} />
 	})
 
 	return (
