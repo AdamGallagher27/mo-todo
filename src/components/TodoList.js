@@ -4,21 +4,18 @@ import { Button, Card, ListGroup } from 'react-bootstrap'
 
 const TodoList = () => {
 
-
-	
-
-	let initialList = [
-		{
-			id: 0,
-			text: 'this is the todo text',
-			done: false
-		},
-		{
-			id: 1,
-			text: 'this is the other todo text',
-			done: true
-		},
-	]
+	// let initialList = [
+	// 	{
+	// 		id: 0,
+	// 		text: 'this is the todo text',
+	// 		done: false
+	// 	},
+	// 	{
+	// 		id: 1,
+	// 		text: 'this is the other todo text',
+	// 		done: true
+	// 	},
+	// ]
 	
 	const [textInput, setTextInput] = useState('')
 
@@ -26,16 +23,18 @@ const TodoList = () => {
 	// local storage has not started assign initial list
 	// other wise use list in local storage
 	const [list, setList] = useState(
-		typeof(JSON.parse(window.localStorage.getItem('list'))[0]) === null ?
-		initialList :
-		JSON.parse(window.localStorage.getItem('list'))
+		localStorage.getItem("list") !== null ?
+		JSON.parse(localStorage.getItem('list')) :
+		[]
 	)
 
 	// when list changes update local storage
 	useEffect(() => {
-		window.localStorage.setItem('list', JSON.stringify(list))
+		localStorage.setItem('list', JSON.stringify(list))
 	}, [list])
 
+
+	// mark a todo as done
 	const markDone = (id) => {
 		const newList = list.map((item) => {
 			if (item.id === id) {
@@ -48,11 +47,13 @@ const TodoList = () => {
 		setList(newList)
 	}
 
+	// delete todo
 	const removeTodo = (id) => {
 		const newList = list.filter((item) => item.id != id)
 		setList(newList)
 	}
 
+	// create new todo
 	const addTodoItem = () => {
 
 		let newTodo
@@ -76,15 +77,19 @@ const TodoList = () => {
 	}
 
 
+	// change text input
 	const handleTextInput = (e) => {
 		setTextInput(e.target.value)
 	}
 
+	// prevent default add new todo
 	const handleSumbit = (e) => {
 		e.preventDefault()
 		addTodoItem()
+		setTextInput('')
 	}
 
+	// render todo components
 	const todoArray = list.map((element) => {
 		return <Todo key={element.id} todo={element} markDone={markDone} remove={removeTodo} />
 	})
