@@ -3,35 +3,36 @@ import { ListGroup, Button } from 'react-bootstrap'
 
 const Todo = (props) => {
 
-  const [done, setDone] = useState(false)
-  const todo = props.todo.text
+  let done = props.todo.done
+  const todo = props.todo
 
   const handleDelete = () => {
-    props.remove()
-  }
-  
-  const handleClick = () => {
-    setDone(!done)
+    props.remove(todo.id)
   }
 
-  
+  const handleClick = () => {
+    props.markDone(props.todo.id)
+  }
+
+  let HTML = <>
+    <span>{todo.text}</span>
+    <div>
+      <Button onClick={handleClick}>Complete</Button>
+      <Button onClick={handleDelete}>Delete</Button>
+    </div>
+  </>
+
+  if(done) {
+    HTML = <>
+    <del>{todo.text}</del>
+    <Button onClick={handleDelete}>Delete</Button>
+  </>
+  }
+
   return (
     <ListGroup.Item className='d-flex justify-content-between'>
-      {!done ? (
-        <>
-          <span>{todo}</span>
-          <Button onClick={handleClick}>Complete</Button>
-          <Button onClick={handleClick}>Delete</Button>
-
-        </>
-      ) : (
-        <>
-          <del>{todo}</del>
-          <Button onClick={handleClick}>Uncomplete</Button>
-          <Button onClick={handleDelete}>Delete</Button>
-        </>
-      )}
-    </ListGroup.Item>
+      {HTML}
+    </ListGroup.Item >
   )
 }
 
